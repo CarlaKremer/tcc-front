@@ -49,6 +49,9 @@ export default function Home() {
           </div>
         </Header>
         <Main>
+          {/* 
+            // TODO: esses cards tão estranhos tem arrumar
+            */}
           <CardStream />
           <CardStream />
           <CardStream />
