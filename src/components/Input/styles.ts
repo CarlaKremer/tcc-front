@@ -4,11 +4,12 @@ export const Container = styled.div<any>`
   width: ${(props) => (props.width ? props.width : "340px")};
   height: 56px;
   background: #efeff8;
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
   background: #efeff8;
   input {
     position: relative;
@@ -44,7 +45,7 @@ export const TextInput = styled.input`
     font-size: 14px;
     line-height: 21px;
     letter-spacing: 0.06em;
-    color: #cccccc;
+    color: rgb(0,0,0,0.7);
   }
 `;
 

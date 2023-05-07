@@ -38,3 +38,49 @@ export const Main = styled.div`
   display: grid;
   grid-template-columns: auto auto auto auto;
 `;
+
+export const ModalWrapper = styled.div`
+.header{
+  display: flex;
+  flex-direction: row-reverse;
+  button{
+    background-color: #282A36;
+    border: 0;
+  }
+}
+.body{
+  width: 100%;
+  h1{
+    color:#f9f9f9;
+  }
+}
+.footer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+  button{
+    background-color: #FFC830;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 14px;
+    padding: 1rem;
+    border-radius: 0.6rem;
+    border: 0;
+    :hover {
+        filter: brightness(1.1);
+        cursor: pointer;
+      }
+  }
+  span{
+    color: #F6F9FF;
+    font-size: 14px;
+    text-decoration: underline;
+    :hover {
+        filter: brightness(1.1);
+      }
+  }
+}
+`

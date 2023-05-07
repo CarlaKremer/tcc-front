@@ -8,6 +8,7 @@ type InputFiledProps = {
   onChange: any;
   value: string;
   children?: any;
+  className?: string;
 };
 
 export default function InputField({
@@ -17,9 +18,10 @@ export default function InputField({
   value = "",
   width = "auto",
   children,
+  className,
 }: InputFiledProps) {
   return (
-    <Container width={width}>
+    <Container width={width} className={className}>
       <TextInput
         value={value}
         onChange={(e: any) => onChange(e.target.value)}
