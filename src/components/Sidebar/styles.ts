@@ -20,7 +20,7 @@ export const Container = styled.div`
 
   .user{
     margin-top: 20px;
-    margin-bottom: 20px;
+
   }
   .fav{
     margin-top: 20px;
@@ -33,5 +33,21 @@ export const Container = styled.div`
 
   @media (max-width: 1024px) {
     display: none;
+  }
+  .logout{
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    button{
+      background-color: transparent;
+      border: 0;
+    color: #F6F9FF;
+    font-size: 14px;
+    text-decoration: underline;
+    :hover {
+        filter: brightness(1.1);
+        cursor: pointer;
+      }
+  }
   }
 `;

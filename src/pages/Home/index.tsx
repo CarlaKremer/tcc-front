@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Template from "../Template";
 import Button from "@/components/Button";
@@ -10,9 +10,46 @@ import Link from "next/link";
 
 export default function Home() {
   const [newSearch, setNewSearch] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [userPassword, setUserPassword] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("test@gmail.com");
+  const [userPassword, setUserPassword] = useState<string>("test123");
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
+
+  async function handleitsLogged() {
+    return localStorage.getItem("user") != null
+      ? setIsOpenModal(false)
+      : setIsOpenModal(true);
+  }
+  function authenticateUser() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      email: userEmail,
+      password: userPassword,
+    });
+
+    const requestOptions: any = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:3002/login", requestOptions)
+      .then((response) => response.text())
+      .then((response) => {
+        localStorage.setItem("user", response),
+          sessionStorage.setItem("user", response);
+      })
+      .then((response) => {
+        console.log("response", response);
+      })
+      .then(() => setIsOpenModal(false))
+      .catch((error) => console.log("error", error));
+  }
+  useEffect(() => {
+    handleitsLogged();
+  }, []);
   return (
     <Template>
       <Container>
@@ -96,6 +133,7 @@ export default function Home() {
               />
             </Input>
             <Input
+              type="password"
               className="input"
               placeholder="Password"
               onChange={(e: any) => {
@@ -112,7 +150,7 @@ export default function Home() {
             </Input>
           </div>
           <div className="footer">
-            <button>Log in</button>
+            <button onClick={() => authenticateUser()}>Log in</button>
             <Link href={""}>
               <span>Create account</span>
             </Link>
