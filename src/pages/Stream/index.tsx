@@ -4,22 +4,31 @@ import { Container, Video, Chat, Profile } from "./styles";
 import Template from "../Template";
 import InputChat from "@/components/InputChat";
 import Image from "next/image";
+import VideoJS from "@/components/VideoJS";
 
 export default function Stream() {
   const [newMsg, setNewMsg] = useState("");
+
+  const videoJsOptions = {
+    fill: true,
+    fluid: true,
+    autoplay: true,
+    controls: true,
+    preload: "metadata",
+    sources: [
+      {
+        src: "http://localhost:8000/live/test/index.mpd",
+        type: "application/dash+xml",
+      },
+    ],
+  };
+
   return (
     <Template>
       <Container>
         <div className="row">
           <Video>
-            <iframe
-              width="853"
-              height="480"
-              src={`https://www.youtube.com/embed/3AT3ofGTVaA`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Embedded youtube"
-            />
+            <VideoJS {...videoJsOptions} />
           </Video>
           <Chat>
             <div className="chat-input">

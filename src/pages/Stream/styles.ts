@@ -16,7 +16,6 @@ export const Video = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: blue;
 `;
 export const Chat = styled.div`
   width: 100%;
