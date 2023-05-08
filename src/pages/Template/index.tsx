@@ -11,10 +11,17 @@ const GlobalStyle = createGlobalStyle`
     background: #1A1922;
   }
 `;
-export default function Template({ children }: any) {
+export default function Template({
+  children,
+  isLoggedChanged,
+  isLoggedChangedSignUp,
+}: any) {
   return (
     <Container className={poppins.className}>
-      <Sidebar />
+      <Sidebar
+        isLoggedChanged={isLoggedChanged}
+        isLoggedChangedSignUp={isLoggedChangedSignUp}
+      />
       <GlobalStyle />
       <Main>{children}</Main>
     </Container>

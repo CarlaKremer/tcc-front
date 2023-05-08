@@ -3,22 +3,25 @@ import { Container } from "./styles";
 import Image from "next/image";
 import router from "next/router";
 
-export default function Sidebar() {
-  const [userLogged, setUserLogged] = useState<any>();
-  async function handleIsLogged() {
-    if (localStorage.getItem("user") != null) {
-      const user: any = localStorage.getItem("user");
-      setUserLogged(JSON.parse(user));
-    }
-  }
-  useEffect(() => {
-    handleIsLogged();
-  }, [localStorage.getItem("user")]);
+export default function Sidebar(
+  isLoggedChanged: any,
+  isLoggedChangedSignUp: any
+) {
+  const [userLogged, setUserLogged] = useState<any>(null);
+
   function handleLogout() {
     localStorage.clear();
     sessionStorage.clear();
     router.push("/Home");
+    window.location.reload();
   }
+
+  useEffect(() => {
+    const sessionStorageUser = sessionStorage.getItem("user");
+    if (sessionStorageUser != null) {
+      setUserLogged(JSON.parse(sessionStorageUser));
+    }
+  }, [isLoggedChanged, isLoggedChangedSignUp]);
 
   return (
     <Container>
@@ -29,11 +32,9 @@ export default function Sidebar() {
         height={32}
         alt="ícone de usuário"
       />
-      {userLogged != null ? (
-        <span className="name">{userLogged.userDto.name}</span>
-      ) : (
-        <span className="name">Logar</span>
-      )}
+      <span className="name">
+        {userLogged?.userDto?.name || userLogged?.user?.name}
+      </span>
       <Image
         className="fav"
         src="/assets/icons/user.svg"

@@ -10,15 +10,12 @@ import Link from "next/link";
 
 export default function Home() {
   const [newSearch, setNewSearch] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("test@gmail.com");
-  const [userPassword, setUserPassword] = useState<string>("test123");
+  const [userName, setUserName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
+  const [isOpenModalSignIn, setIsOpenModalSignIn] = useState<boolean>(false);
 
-  async function handleitsLogged() {
-    return localStorage.getItem("user") != null
-      ? setIsOpenModal(false)
-      : setIsOpenModal(true);
-  }
   function authenticateUser() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -47,11 +44,48 @@ export default function Home() {
       .then(() => setIsOpenModal(false))
       .catch((error) => console.log("error", error));
   }
+  function createUser() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Authorization",
+      "Bearer eyJhbGciOiJIUzI1NiJ9.e30.enz7JPg6fxaj8jsPKagavzuGeE7d17F_73mLPG7YgN8"
+    );
+
+    const raw = JSON.stringify({
+      name: userName,
+      email: userEmail,
+      password: userPassword,
+    });
+
+    const requestOptions: any = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:3002/users", requestOptions)
+      .then((response) => response.text())
+      .then((response) => {
+        localStorage.setItem("user", response),
+          sessionStorage.setItem("user", response);
+      })
+      .then((result) => console.log(result))
+      .then(() => setIsOpenModal(false))
+      .then(() => setIsOpenModalSignIn(false))
+      .catch((error) => console.log("error", error));
+  }
+
   useEffect(() => {
-    handleitsLogged();
+    const sessionStorageUser = sessionStorage.getItem("user");
+    sessionStorageUser != null ? setIsOpenModal(false) : setIsOpenModal(true);
   }, []);
   return (
-    <Template>
+    <Template
+      isLoggedChanged={isOpenModal}
+      isLoggedChangedSignUp={isOpenModalSignIn}
+    >
       <Container>
         <Header>
           <div className="banner">
@@ -151,9 +185,84 @@ export default function Home() {
           </div>
           <div className="footer">
             <button onClick={() => authenticateUser()}>Log in</button>
-            <Link href={""}>
+            <Link
+              href={""}
+              onClick={() => {
+                setIsOpenModal(false), setIsOpenModalSignIn(true);
+              }}
+            >
               <span>Create account</span>
             </Link>
+          </div>
+        </ModalWrapper>
+      </Modal>
+      <Modal isOpenModal={isOpenModalSignIn} setOpenModal={!isOpenModalSignIn}>
+        <ModalWrapper>
+          <div className="header">
+            <button
+              onClick={() => setIsOpenModal(false)}
+              data-testid="close-edit-nps"
+            >
+              <Image
+                src="/assets/icons/X.svg"
+                alt="ícone de fechar"
+                width={20}
+                height={20}
+              />
+            </button>
+          </div>
+          <div className="body">
+            <h1>Sign Up</h1>
+            <Input
+              className="input"
+              placeholder="Name"
+              onChange={(e: any) => {
+                setUserName(e);
+              }}
+              value={userName}
+            >
+              <Image
+                alt="ícone de usuário"
+                src={"/assets/icons/user-login.svg"}
+                width={20}
+                height={20}
+              />
+            </Input>
+            <Input
+              className="input"
+              placeholder="E-mail"
+              onChange={(e: any) => {
+                setUserEmail(e);
+              }}
+              value={userEmail}
+            >
+              <Image
+                alt="ícone de usuário"
+                src={"/assets/icons/email.svg"}
+                width={20}
+                height={20}
+              />
+            </Input>
+
+            <Input
+              type="password"
+              className="input"
+              placeholder="Password"
+              onChange={(e: any) => {
+                setUserPassword(e);
+              }}
+              value={userPassword}
+            >
+              <Image
+                alt="ícone de chave"
+                src={"/assets/icons/password.svg"}
+                width={20}
+                height={20}
+              />
+            </Input>
+          </div>
+          <div className="footer">
+            <button onClick={() => createUser()}>Sign Up</button>
           </div>
         </ModalWrapper>
       </Modal>
