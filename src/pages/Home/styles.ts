@@ -53,6 +53,10 @@ export const ModalWrapper = styled.div`
   h1{
     color:#f9f9f9;
   }
+  .error{
+    font-size: 10px;
+    color: #ff6961;
+  }
 }
 .footer{
   display: flex;
@@ -75,7 +79,7 @@ export const ModalWrapper = styled.div`
       }
   }
   span{
-    color: #F6F9FF;
+     font-size: 14px;
     font-size: 14px;
     text-decoration: underline;
     :hover {
