@@ -4,6 +4,7 @@ type InputFiledProps = {
   placeholder: string;
   type?: string;
   onChange: any;
+  onKeyDown: any;
   value: string;
   width?: string;
 };
@@ -14,6 +15,7 @@ export default function InputChat({
   onChange,
   value,
   width,
+  onKeyDown,
 }: InputFiledProps) {
   return (
     <Container width={width}>
@@ -22,6 +24,7 @@ export default function InputChat({
         onChange={(e: any) => onChange(e.target.value)}
         placeholder={placeholder}
         type={type}
+        onKeyDown={onKeyDown}
       />
     </Container>
   );

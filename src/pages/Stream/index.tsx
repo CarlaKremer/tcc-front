@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Container, Video, Chat, Profile } from "./styles";
 import Template from "../Template";
 import InputChat from "@/components/InputChat";
 import Image from "next/image";
 import VideoJS from "@/components/VideoJS";
+import ChatApi from "@/components/ChatApi";
+import io from "socket.io-client";
 
 export default function Stream() {
+  const [userLogged, setUserLogged] = useState<any>(null);
+  const socket = io.connect("http://localhost:3001");
+
   const [newMsg, setNewMsg] = useState("");
+  const [username, setUsername] = useState(userLogged?.userDto?.user);
+  const [room, setRoom] = useState("1");
+  const [showChat, setShowChat] = useState(false);
+
+  const joinRoom = () => {
+    if (username !== "" && room !== "") {
+      socket.emit("join_room", room);
+      setShowChat(true);
+    }
+  };
 
   const videoJsOptions = {
     fill: true,
     fluid: true,
-    autoplay: true,
+    autoplay: false,
     controls: true,
     preload: "metadata",
     sources: [
@@ -23,6 +38,16 @@ export default function Stream() {
     ],
   };
 
+  useEffect(() => {
+    joinRoom();
+  }, []);
+  useEffect(() => {
+    const sessionStorageUser = sessionStorage.getItem("user");
+    if (sessionStorageUser != null) {
+      setUserLogged(JSON.parse(sessionStorageUser));
+    }
+  }, []);
+
   return (
     <Template>
       <Container>
@@ -31,51 +56,14 @@ export default function Stream() {
             <VideoJS {...videoJsOptions} />
           </Video>
           <Chat>
-            <div className="chat-input">
-              <InputChat
-                placeholder="Type"
-                onChange={(e: any) => {
-                  setNewMsg(e);
-                }}
-                value={newMsg}
-              />
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
-            <div className="msg-container">
-              <span className="user">fulado de tal:</span>
-              <span className="msg">loren</span>
-            </div>
+            {!showChat ? (
+              <div className="joinChatContainer">
+                <h3>Join A Chat</h3>
+                <button onClick={joinRoom}>Join A Room</button>
+              </div>
+            ) : (
+              <ChatApi socket={socket} username={username} room={room} />
+            )}
           </Chat>
         </div>
         <Profile>
