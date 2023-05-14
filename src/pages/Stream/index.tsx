@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import { Container, Video, Chat, Profile } from "./styles";
 import Template from "../Template";
-import InputChat from "@/components/InputChat";
 import Image from "next/image";
 import VideoJS from "@/components/VideoJS";
 import ChatApi from "@/components/ChatApi";
-import io from "socket.io-client";
+import * as io from "socket.io-client";
 
+const socket = io.connect("http://localhost:3001");
 export default function Stream() {
   const [userLogged, setUserLogged] = useState<any>(null);
-  const socket = io.connect("http://localhost:3001");
 
-  const [newMsg, setNewMsg] = useState("");
   const [username, setUsername] = useState(userLogged?.userDto?.user);
   const [room, setRoom] = useState("1");
   const [showChat, setShowChat] = useState(false);
