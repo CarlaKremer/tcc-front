@@ -125,9 +125,6 @@ export default function Home() {
           <Link href="/Stream">
             <CardStream />
           </Link>
-          <CardStream />
-          <CardStream />
-          <CardStream />
         </Main>
       </Container>
       {/* Login */}

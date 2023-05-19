@@ -11,15 +11,13 @@ const socket = io.connect("http://localhost:3001");
 export default function Stream() {
   const [userLogged, setUserLogged] = useState<any>(null);
 
-  const [username, setUsername] = useState(userLogged?.userDto?.user);
+  const [username, setUsername] = useState(userLogged?.userDto?.name);
   const [room, setRoom] = useState("1");
   const [showChat, setShowChat] = useState(false);
 
   const joinRoom = () => {
-    if (username !== "" && room !== "") {
-      socket.emit("join_room", room);
-      setShowChat(true);
-    }
+    socket.emit("join_room", room);
+    setShowChat(true);
   };
 
   const videoJsOptions = {
@@ -40,11 +38,12 @@ export default function Stream() {
     joinRoom();
   }, []);
   useEffect(() => {
-    const sessionStorageUser = sessionStorage.getItem("user");
+    const sessionStorageUser = localStorage.getItem("user");
     if (sessionStorageUser != null) {
       setUserLogged(JSON.parse(sessionStorageUser));
+      setUsername(userLogged?.userDto?.name);
     }
-  }, []);
+  }, [socket, showChat]);
 
   return (
     <Template>
@@ -60,7 +59,11 @@ export default function Stream() {
                 <button onClick={joinRoom}>Join A Room</button>
               </div>
             ) : (
-              <ChatApi socket={socket} username={username} room={room} />
+              <ChatApi
+                socket={socket}
+                username={userLogged?.userDto?.name || userLogged?.user?.name}
+                room={room}
+              />
             )}
           </Chat>
         </div>
